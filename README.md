@@ -14,17 +14,12 @@
 
 > Press Add secret 
 
-
-
 > Go to Action> CI> Run workflow
 
 > Refresh Web and go to CI> build
 
 > Press Down facing arrow button "RDP INFO LOGIN" To Get IP, User, Password.
-```
-## If Error Showed
 
-Just Download This Whole repository And make new repo in your GitHub account and upload all the files
 ### WARN
 
 THIS IS ONLY FOR EDUCATIONAL PURPOSES
