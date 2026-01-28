@@ -201,7 +201,7 @@ readme/
 
 2. **Get ngrok Authentication Token**
    - Sign up at [ngrok Dashboard](https://dashboard.ngrok.com)
-   - Navigate to [Auth Token](https://dashboard.ngrok.com/auth/your-authtoken)
+   - Navigate to [Auth Token](https://dashboard.ngrok.com/get-started/your-authtoken)
    - Copy your authentication token
 
 3. **Configure GitHub Secrets**
@@ -315,7 +315,7 @@ The ngrok tunnel URL is automatically retrieved during setup. If you see the err
    - Go to: `Settings` → `Secrets and variables` → `Actions`
    - Check if `NGROK_AUTH` secret exists
    - Verify the token is correct (no extra spaces or characters)
-   - Get your token from: https://dashboard.ngrok.com/auth/your-authtoken
+   - Get your token from: https://dashboard.ngrok.com/get-started/your-authtoken
    - Update the secret if incorrect
 
 3. **Check for Multiple/Stale Tunnels**
