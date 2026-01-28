@@ -114,10 +114,37 @@ jobs:
       run: |
         Write-Host "[*] Starting ngrok tunnel on port 3389 (RDP)..."
         Write-Host "[*] Region: Asia Pacific (ap)"
-        Start-Process PowerShell -ArgumentList '-Noexit', '-Command', '.\ngrok\ngrok.exe tcp --region ap 3389'
-        Start-Sleep -Seconds 3
-        Write-Host "[+] Ngrok tunnel started"
-        Write-Host "[*] Check tunnel status at: https://dashboard.ngrok.com/status/tunnels"
+        
+        # Start ngrok in background using Start-Process with WindowStyle Hidden
+        $ngrokProcess = Start-Process -FilePath ".\ngrok\ngrok.exe" -ArgumentList "tcp", "--region", "ap", "3389" -PassThru -WindowStyle Hidden
+        
+        Write-Host "[*] Waiting for ngrok to initialize..."
+        Start-Sleep -Seconds 5
+        
+        # Verify ngrok process is running
+        $maxRetries = 10
+        $retryCount = 0
+        $ngrokRunning = $false
+        
+        while ($retryCount -lt $maxRetries) {
+            $process = Get-Process -Name "ngrok" -ErrorAction SilentlyContinue
+            if ($process) {
+                $ngrokRunning = $true
+                Write-Host "[+] Ngrok process is running (PID: $($process.Id))"
+                break
+            }
+            Write-Host "[*] Waiting for ngrok to start... (Attempt $($retryCount + 1)/$maxRetries)"
+            Start-Sleep -Seconds 2
+            $retryCount++
+        }
+        
+        if (-not $ngrokRunning) {
+            Write-Host "[!] WARNING: Could not verify ngrok process, but continuing..."
+            Write-Host "[!] Check tunnel status at: https://dashboard.ngrok.com/status/tunnels"
+        } else {
+            Write-Host "[+] Ngrok tunnel started successfully"
+            Write-Host "[*] Check tunnel status at: https://dashboard.ngrok.com/status/tunnels"
+        }
 
     # ============================================
     # Step 7: Initialize RDP Environment
