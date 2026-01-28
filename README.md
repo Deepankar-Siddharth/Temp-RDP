@@ -1,208 +1,203 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=240&section=header&text=Deepankar%20Siddharth&fontSize=44&fontAlignY=35)
+# 🖥️ Temp-RDP - Automated Windows RDP Provisioning
+
+![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=240&section=header&text=Temp-RDP&fontSize=44&fontAlignY=35)
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1000&center=true&vCenter=true&width=700&lines=Automation+Developer;Terminal+%26+VPS+Tooling;Clinical+Precision+%7C+Code+Logic;Building+Tools+That+Actually+Get+Used" />
-</p>
-
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=Deepankar-Siddharth&label=Profile%20Views&color=blueviolet&style=flat" />
-  <img src="https://img.shields.io/badge/Linux-PowerUser-black?logo=linux" />
-  <img src="https://img.shields.io/badge/BDS-3rd%20Year-red" />
-  <img src="https://img.shields.io/badge/Automation-Focused-success" />
+  <img src="https://img.shields.io/badge/Windows-RDP-blue?logo=windows" />
+  <img src="https://img.shields.io/badge/GitHub-Actions-black?logo=github" />
+  <img src="https://img.shields.io/badge/ngrok-Tunnel-1F1E37?logo=ngrok" />
+  <img src="https://img.shields.io/badge/Automation-Script-green" />
 </p>
 
 ---
 
-## ⚡ The Developer Behind the Dentist
+## 📋 Overview
 
-<div align="center">
+**Temp-RDP** is an automated Windows RDP (Remote Desktop Protocol) provisioning system that creates ephemeral Windows environments through GitHub Actions. The system automatically configures Windows Server instances, sets up secure ngrok tunneling, and provides instant remote desktop access for development, testing, and educational purposes.
 
-I am **Deepankar Siddharth**, a 3rd-year **BDS (Dental) student** who spends his nights in the terminal. I specialize in building headless tools that solve real-world automation pain points, applying the same precision I use in clinical work to my code.
+### ✨ Key Features
 
-</div>
-
-<div align="center">
-
-| 🧪 **What I'm doing** | 🛠️ **My Philosophy** | 📚 **Currently Learning** |
-|:---:|:---:|:---:|
-| Orchestrating ephemeral VPS environments and APK analysis | If you have to do it twice, write a script | Advanced Docker Swarm and Golang for high-speed binaries |
-
-</div>
+- 🚀 **One-Click Provisioning** - Launch Windows RDP instances via GitHub Actions
+- 🔒 **Secure Tunneling** - Automatic ngrok TCP tunnel setup for secure remote access
+- ⚙️ **Automated Configuration** - Complete Windows environment setup with user accounts and system settings
+- 📊 **Status Monitoring** - Real-time RDP and ngrok tunnel health monitoring
+- 🎨 **Custom Wallpaper** - Automated wallpaper and system customization
+- ⏱️ **Long-Running Sessions** - Up to 9999 minutes of runtime per instance
 
 ---
 
-## 🧰 Technical Arsenal
+## 📁 Repository Structure
 
-### 🚀 My Daily Stack
-
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=linux,bash,python,php,nodejs,docker,git,android,githubactions,postman,mysql,nginx&perline=6" />
-</div>
-
-<br>
-
-### 🎯 Domain Expertise
-
-<div align="center">
-
-| Service | Specialized In | Status |
-|:---:|:---:|:---:|
-| **🤖 Automation** | Python (Selenium/Requests), Scrapy, Cron Logic | 🟢 Advanced |
-| **☁️ Cloud/VPS** | SSH Hardening, RDP Provisioning, Reverse Proxies | 🟢 Advanced |
-| **🔍 Analysis** | APK Decompilation, API Hooking, Static Analysis | 🟡 Intermediate |
-| **⚙️ CI/CD** | Automated Testing & Deployment via GitHub Actions | 🟢 Advanced |
-
-</div>
+```
+readme/
+├── .github/
+│   └── workflows/
+│       └── blank.yml          # GitHub Actions workflow for RDP provisioning
+├── start.bat                   # RDP setup and configuration script
+├── loop.bat                    # RDP status monitoring script
+├── wallpaper.bat               # Wallpaper and system configuration script
+└── README.md                   # This file
+```
 
 ---
 
-## 🚀 Featured Projects
+## 🔧 Scripts Documentation
 
-<div align="center">
+### 1. `start.bat` - RDP Setup and Configuration
 
-### 🖥️ [Temp-RDP](https://github.com/Deepankar-Siddharth/Temp-RDP)
+**Purpose:** Automates complete Windows RDP environment setup and configuration.
 
-> **On-demand remote environments without the overhead.**
+**Functions:**
+- ✅ **System Configuration**
+  - Removes default desktop shortcuts (Epic Games Launcher)
+  - Sets server description to "Windows Server 2019"
+  - Disables system tray auto-hide
+  - Configures autorun entries for wallpaper and system scripts
 
-</div>
+- 👤 **User Account Management**
+  - Creates user account: `Darkzino`
+  - Sets password: `Qwerty@123456`
+  - Grants administrator privileges
+  - Activates user account
+  - Removes default installer user
 
-<div align="justify">
+- ⚙️ **System Services**
+  - Enables disk performance counters
+  - Configures and starts audio service
+  - Grants file permissions to user account
 
-A production-grade automation system that provisions isolated Windows and Linux instances on-demand through VPS API integration. Built with shell scripting and infrastructure-as-code principles, it eliminates manual setup friction for testing and development workflows.
+- 🔗 **RDP Connection Info**
+  - Retrieves ngrok tunnel URL via localhost:4040 API
+  - Displays connection credentials
+  - Provides troubleshooting information
 
-</div>
+**Usage:** Executed automatically by GitHub Actions workflow during RDP initialization.
 
-<table>
-<tr>
-<td width="50%" valign="top">
+---
 
-**🎯 Core Idea**  
-Ephemeral computing environments that spin up in seconds and tear down automatically.
+### 2. `loop.bat` - RDP Status Monitor
 
-</td>
-<td width="50%" valign="top">
+**Purpose:** Continuously monitors RDP connection and ngrok tunnel status.
 
-**🔧 Technical Domain**  
-Infrastructure automation, API orchestration, system provisioning.
+**Functions:**
+- 🔍 **Process Monitoring**
+  - Checks if `ngrok.exe` process is running
+  - Validates RDP connection health
+  - Displays real-time status with timestamp
 
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
+- ⚠️ **Error Detection**
+  - Detects ngrok process termination
+  - Provides troubleshooting steps for connection issues
+  - Validates ngrok authentication token
 
-**💡 Real-World Impact**  
-Reduces environment setup time from hours to under 60 seconds, enabling rapid iteration cycles.
+- 📊 **Status Display**
+  - Shows current date and time (UTC)
+  - Displays ngrok tunnel status
+  - Provides connection health indicators
 
-</td>
-<td width="50%" valign="top">
+**Usage:** Runs continuously after RDP setup to monitor connection status. Press `Ctrl+C` to stop.
 
-**📊 Status**  
-🟢 Production Ready
+**Troubleshooting:**
+- If ngrok process not found, check:
+  1. NGROK_AUTH_TOKEN in GitHub Secrets
+  2. Previous VM instance status
+  3. ngrok dashboard: https://dashboard.ngrok.com/status/tunnels
 
-</td>
-</tr>
-</table>
+---
 
-<br>
+### 3. `wallpaper.bat` - Wallpaper and System Configuration
 
-<div align="center">
+**Purpose:** Sets system wallpaper and executes PowerShell configuration scripts.
 
-### 📦 [Terminal Package Collection](https://github.com/Deepankar-Siddharth/terminal_package_collection)
+**Functions:**
+- 🔐 **Privilege Elevation**
+  - Automatically requests administrator privileges via UAC
+  - Creates temporary VBScript for elevation
+  - Cleans up elevation scripts after execution
 
-> **The ultimate server bootstrap toolkit.**
+- 🎨 **Wallpaper Configuration**
+  - Sets wallpaper from `C:\Windows\System32\wallpaper.bmp`
+  - Updates registry entries for wallpaper
+  - Forces wallpaper refresh via Windows API
 
-</div>
+- 📜 **PowerShell Script Execution**
+  - Executes `system23.ps1` (system configuration)
+  - Executes `autorun.ps1` (autorun tasks)
+  - Uses RemoteSigned execution policy
+  - Handles missing script files gracefully
 
-<div align="justify">
+- 🧹 **System Cleanup**
+  - Removes desktop shortcuts (`.ink` and `.lnk` files)
+  - Restarts Windows Explorer to apply changes
+  - Restores original directory context
 
-A curated repository of battle-tested scripts, binaries, and configuration templates designed for zero-touch server deployment. Every component is selected for reliability and tested across multiple Linux distributions.
+**Usage:** Executed automatically on system startup via autorun registry entry.
 
-</div>
+---
 
-<table>
-<tr>
-<td width="50%" valign="top">
+## 🚀 GitHub Actions Workflow
 
-**🎯 Core Idea**  
-One-command server provisioning that transforms bare metal into a production-ready system.
+### Workflow: `blank.yml`
 
-</td>
-<td width="50%" valign="top">
+**Trigger:** Manual workflow dispatch via GitHub Actions UI
 
-**🔧 Technical Domain**  
-DevOps tooling, system administration, package management.
+**Runtime:** Up to 9999 minutes (166.65 hours)
 
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
+**Steps:**
 
-**💡 Real-World Impact**  
-Eliminates repetitive setup tasks and standardizes server configurations across environments.
+1. **Download Required Files**
+   - Downloads ngrok stable Windows binary
+   - Downloads PowerShell scripts (`autorun.ps1`, `system23.ps1`)
+   - Downloads batch scripts (`start.bat`, `wallpaper.bat`, `loop.bat`)
+   - Downloads wallpaper image (`wallpaper.bmp`)
 
-</td>
-<td width="50%" valign="top">
+2. **Extract Ngrok Archive**
+   - Extracts ngrok to `.\ngrok` directory
 
-**📊 Status**  
-🟢 Actively Maintained
+3. **Authenticate Ngrok Account**
+   - Authenticates using `NGROK_AUTH` secret from repository settings
+   - Validates authentication token
 
-</td>
-</tr>
-</table>
+4. **Configure Remote Desktop Access**
+   - Enables RDP via registry (`fDenyTSConnections = 0`)
+   - Enables RDP firewall rules
+   - Configures RDP authentication settings
 
-<br>
+5. **Deploy Configuration Files**
+   - Copies `wallpaper.bat` to `D:\a\wallpaper.bat`
+   - Copies `wallpaper.bmp` to `C:\Windows\System32\wallpaper.bmp`
+   - Copies PowerShell scripts to `C:\Windows\System32\`
 
-<div align="center">
+6. **Start Ngrok TCP Tunnel**
+   - Starts ngrok tunnel on port 3389 (RDP default port)
+   - Uses Asia Pacific (ap) region
+   - Runs in background PowerShell process
 
-### 🌐 [netslutter-RDP](https://github.com/Deepankar-Siddharth/netslutter-RDP)
+7. **Initialize RDP Environment**
+   - Executes `start.bat` to configure system
+   - Creates user accounts and applies settings
+   - Displays connection information
 
-> **Automated RDP provisioning via GitHub Actions and ngrok tunneling.**
+8. **Monitor RDP Status**
+   - Executes `loop.bat` for continuous monitoring
+   - Maintains RDP session active
 
-</div>
+---
 
-<div align="justify">
+## 🛠️ Setup Instructions
 
-A fully automated remote desktop solution that leverages GitHub Actions to provision Windows RDP instances with secure ngrok tunneling. Designed for educational and development purposes, it provides instant access to isolated Windows environments without manual configuration.
+### Prerequisites
 
-</div>
+- GitHub account
+- ngrok account (free tier available)
+- Repository with GitHub Actions enabled
 
-<table>
-<tr>
-<td width="50%" valign="top">
+### Step-by-Step Setup
 
-**🎯 Core Idea**  
-One-click RDP instance creation through GitHub Actions with automatic ngrok tunnel setup for secure remote access.
-
-</td>
-<td width="50%" valign="top">
-
-**🔧 Technical Domain**  
-CI/CD automation, infrastructure provisioning, secure tunneling, remote desktop services.
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-**💡 Real-World Impact**  
-Enables instant Windows environment access for testing, development, and educational workflows without local setup overhead.
-
-</td>
-<td width="50%" valign="top">
-
-**📊 Status**  
-🟢 Active Development
-
-</td>
-</tr>
-</table>
-
-#### 🚀 Quick Setup Guide
-
-<div align="left">
-
-1. **Fork the Repository**
-   - Click the Fork button (use Desktop Mode on Android devices)
+1. **Fork or Clone Repository**
+   ```bash
+   git clone https://github.com/Deepankar-Siddharth/readme.git
+   ```
 
 2. **Get ngrok Authentication Token**
    - Sign up at [ngrok Dashboard](https://dashboard.ngrok.com)
@@ -210,112 +205,289 @@ Enables instant Windows environment access for testing, development, and educati
    - Copy your authentication token
 
 3. **Configure GitHub Secrets**
-   - Go to `Settings` → `Secrets and variables` → `Actions`
+   - Go to repository `Settings` → `Secrets and variables` → `Actions`
    - Click `New repository secret`
    - Name: `NGROK_AUTH`
    - Value: Paste your ngrok authentication token
    - Click `Add secret`
 
 4. **Launch RDP Instance**
-   - Navigate to `Actions` → `CI` → `Run workflow`
-   - Refresh the page and go to `CI` → `build`
-   - Click the dropdown arrow on "RDP INFO LOGIN" to retrieve:
-     - IP Address
-     - Username
-     - Password
+   - Navigate to `Actions` tab in repository
+   - Select `Temp-RDP` workflow
+   - Click `Run workflow` → `Run workflow` button
+   - Wait for workflow to complete initialization
 
-</div>
+5. **Retrieve Connection Details**
 
-<div align="center">
+   **Method 1: From Workflow Output (If Available)**
+   - In the workflow run, expand `Initialize RDP Environment` step
+   - Look for "RDP Connection Details" section
+   - Copy the ngrok tunnel URL if displayed
+   
+   **Method 2: From ngrok Dashboard (Recommended)**
+   - If workflow shows "Unable to get NGROK tunnel" error, use this method
+   - Visit: https://dashboard.ngrok.com/status/tunnels
+   - Find the active TCP tunnel on port 3389
+   - Copy the public URL (format: `tcp://0.tcp.ap.ngrok.io:XXXXX`)
+   - For RDP connection, use: `0.tcp.ap.ngrok.io:XXXXX` (remove `tcp://` prefix)
+   
+   **Default Credentials:**
+   - **Username:** `Darkzino`
+   - **Password:** `Qwerty@123456`
 
-<strong>⚠️ Important Notice</strong>
-
-<em>This project is intended for educational and legitimate development purposes only. Do not use for cryptocurrency mining, illegal activities, or unauthorized access. Respect GitHub's terms of service and usage policies.</em>
-
-</div>
-
----
-
-## 🧠 Private Engineering Work
-
-<div align="justify">
-
-Beyond public repositories, I maintain several private projects focused on solving specific automation challenges and internal workflow optimization. These systems operate at the intersection of infrastructure management, data processing, and operational efficiency.
-
-</div>
-
-<div align="center">
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-**🤖 Automation Systems**  
-Custom orchestration pipelines that handle complex, multi-step workflows requiring precise timing and error recovery. These systems integrate with various APIs and services to automate tasks that would otherwise consume significant manual effort.
-
-</td>
-<td width="50%" valign="top">
-
-**🛠️ Internal Tooling**  
-Specialized utilities built for specific operational needs—ranging from data transformation workflows to infrastructure monitoring solutions. Each tool is designed with a single responsibility: eliminate a recurring pain point.
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-**📊 Analysis Platforms**  
-Private frameworks for processing and analyzing structured data at scale. These systems handle everything from data ingestion to transformation and reporting, built with performance and reliability as core requirements.
-
-</td>
-<td width="50%" valign="top">
-
-**⚡ Workflow Automation**  
-End-to-end automation solutions that connect disparate systems and services, enabling seamless data flow and task execution without manual intervention. These projects prioritize reliability over features, ensuring consistent operation under varying conditions.
-
-</td>
-</tr>
-</table>
-
-</div>
-
-<div align="center">
-
-<em>While these projects remain private, they share a common philosophy: build tools that solve real problems, not theoretical ones. Each system is designed to be maintainable, reliable, and focused on delivering measurable impact.</em>
-
-</div>
+6. **Connect to RDP**
+   - Open Remote Desktop Connection (mstsc.exe)
+   - Enter the ngrok tunnel URL as the computer name
+   - Use the provided username and password
+   - Click Connect
 
 ---
 
-## 📊 Performance Dashboard
+## 📊 Connection Information
 
-<div align="center">
+### Default Credentials
 
-<img width="100%" max-width="800" src="https://github-readme-stats.vercel.app/api?username=Deepankar-Siddharth&show_icons=true&theme=radical&hide_border=true&rank_icon=github&include_all_commits=true&count_private=true" alt="Deepankar's Github Stats" />
+- **Username:** `Darkzino`
+- **Password:** `Qwerty@123456`
 
-<img width="100%" max-width="800" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Deepankar-Siddharth&layout=compact&theme=radical&hide_border=true&langs_count=8" alt="Top Languages" />
+### Port Information
 
-</div>
+- **RDP Port:** `3389` (standard Windows RDP port)
+- **ngrok Tunnel:** TCP tunnel on port 3389
+- **ngrok Region:** Asia Pacific (ap)
+
+### Retrieving Connection URL
+
+The ngrok tunnel URL is automatically retrieved during setup. If you see the error message:
+
+```
+[!] Unable to get NGROK tunnel
+[!] Please verify NGROK_AUTH is correct in Settings > Secrets > Repository secret
+[!] Check if previous VM is still running: https://dashboard.ngrok.com/status/tunnels
+```
+
+**Follow these steps:**
+
+1. **Check ngrok Dashboard** (Primary Method)
+   - Visit: https://dashboard.ngrok.com/status/tunnels
+   - Look for active TCP tunnel on port 3389
+   - Copy the public URL (format: `tcp://0.tcp.ap.ngrok.io:XXXXX`)
+   - Remove the `tcp://` prefix and use only the hostname and port (e.g., `0.tcp.ap.ngrok.io:12345`)
+
+2. **Verify GitHub Secrets**
+   - Go to repository `Settings` → `Secrets and variables` → `Actions`
+   - Verify `NGROK_AUTH` secret exists and is correct
+   - If missing or incorrect, update it with your ngrok auth token
+
+3. **Check for Active Tunnels**
+   - If multiple tunnels exist, identify the one on port 3389
+   - Ensure no previous VM instance is still running
+   - Terminate old tunnels if necessary
+
+4. **Manual Connection Format**
+   - Use the format: `HOSTNAME:PORT` (e.g., `0.tcp.ap.ngrok.io:12345`)
+   - Do NOT include `tcp://` prefix in Remote Desktop Connection
+   - Enter in Remote Desktop Connection as: `0.tcp.ap.ngrok.io:12345`
 
 ---
 
-## 🌐 Connect & Collaborate
+## 🔍 Troubleshooting
+
+### Issue: Unable to Get NGROK Tunnel
+
+**Symptoms:**
+- Error message: `[!] Unable to get NGROK tunnel`
+- `start.bat` cannot retrieve ngrok tunnel information
+- Connection URL not displayed in workflow output
+
+**Solutions:**
+
+1. **Check ngrok Dashboard** (Most Reliable Method)
+   ```
+   Visit: https://dashboard.ngrok.com/status/tunnels
+   ```
+   - Look for active TCP tunnel on port 3389
+   - Copy the public URL shown
+   - Format: `tcp://0.tcp.ap.ngrok.io:XXXXX`
+   - For RDP connection, use: `0.tcp.ap.ngrok.io:XXXXX` (remove `tcp://`)
+
+2. **Verify GitHub Secret**
+   - Go to: `Settings` → `Secrets and variables` → `Actions`
+   - Check if `NGROK_AUTH` secret exists
+   - Verify the token is correct (no extra spaces or characters)
+   - Get your token from: https://dashboard.ngrok.com/auth/your-authtoken
+   - Update the secret if incorrect
+
+3. **Check for Multiple/Stale Tunnels**
+   - Visit ngrok dashboard: https://dashboard.ngrok.com/status/tunnels
+   - Terminate any old/stale tunnels
+   - Ensure only one active tunnel exists for port 3389
+   - Wait 1-2 minutes after starting workflow before checking
+
+4. **Manual Retrieval Method**
+   - Even if automatic retrieval fails, the tunnel is still active
+   - Always check ngrok dashboard for the connection URL
+   - The RDP instance is functional even if URL retrieval fails
+
+5. **Rebuild Workflow**
+   - If issues persist, cancel current workflow run
+   - Verify `NGROK_AUTH` secret is correct
+   - Start a new workflow run
+   - Check dashboard immediately after tunnel starts
+
+### Issue: ngrok Process Not Found
+
+**Symptoms:**
+- `loop.bat` shows "ngrok.exe process not found"
+- RDP connection fails
+- ngrok tunnel not established
+
+**Solutions:**
+1. Verify `NGROK_AUTH` secret is correctly set in repository settings
+2. Check if previous VM instance is still running
+3. Verify ngrok token at: https://dashboard.ngrok.com/status/tunnels
+4. Check workflow logs for ngrok authentication errors
+5. Rebuild the workflow if issues persist
+
+### Issue: RDP Connection Timeout
+
+**Symptoms:**
+- Cannot connect to RDP using ngrok URL
+- Connection times out
+
+**Solutions:**
+1. Verify ngrok tunnel is active in dashboard
+2. Check if firewall is blocking connection
+3. Ensure RDP is enabled on Windows instance
+4. Try rebuilding the workflow
+
+### Issue: User Account Not Created
+
+**Symptoms:**
+- Cannot login with provided credentials
+- User account missing
+
+**Solutions:**
+1. Check `start.bat` execution logs in workflow
+2. Verify user creation step completed successfully
+3. Rebuild workflow if user creation failed
+4. Check for error messages in workflow output
+
+### Issue: Wallpaper Not Applied
+
+**Symptoms:**
+- Default wallpaper still showing
+- Custom wallpaper not visible
+
+**Solutions:**
+1. Verify `wallpaper.bmp` was downloaded successfully
+2. Check if `wallpaper.bat` executed without errors
+3. Verify file exists at `C:\Windows\System32\wallpaper.bmp`
+4. Restart Windows Explorer manually if needed
+
+---
+
+## ⚠️ Important Notes
+
+### Security Considerations
+
+- **Default Credentials:** The default username and password are hardcoded. Change them for production use.
+- **ngrok Tunneling:** ngrok tunnels are publicly accessible. Use strong passwords.
+- **Session Duration:** Workflows run for up to 9999 minutes. Monitor usage to avoid exceeding limits.
+
+### Usage Guidelines
+
+- ✅ **Intended Use:**
+  - Development and testing environments
+  - Educational purposes
+  - Temporary remote access needs
+  - Software testing and validation
+
+- ❌ **Not Intended For:**
+  - Production workloads
+  - Cryptocurrency mining
+  - Illegal activities
+  - Unauthorized access attempts
+
+### GitHub Actions Limits
+
+- **Free Tier:** 2000 minutes/month
+- **Workflow Timeout:** 9999 minutes per run
+- **Concurrent Jobs:** Limited by GitHub plan
+
+---
+
+## 📝 Technical Details
+
+### System Requirements
+
+- **OS:** Windows Server 2019/2022 (GitHub Actions `windows-latest`)
+- **RAM:** 7GB (GitHub Actions standard)
+- **CPU:** 2 cores (GitHub Actions standard)
+- **Storage:** 256GB SSD (GitHub Actions standard)
+
+### Dependencies
+
+- **ngrok:** Latest stable Windows binary
+- **PowerShell:** Built-in Windows PowerShell
+- **curl & jq:** For ngrok API interaction (optional)
+
+### Registry Modifications
+
+The scripts modify the following registry keys:
+
+- `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\EnableAutoTray`
+- `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Wallpaper`
+- `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\autorun`
+- `HKEY_CURRENT_USER\Control Panel\Desktop\WallPaper`
+- `HKLM:\System\CurrentControlSet\Control\Terminal Server\fDenyTSConnections`
+- `HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp\UserAuthentication`
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Areas for Contribution
+
+- Enhanced error handling
+- Additional system configurations
+- Security improvements
+- Documentation updates
+- Feature requests
+
+---
+
+## 📄 License
+
+This project is provided as-is for educational and development purposes.
+
+---
+
+## 🔗 Related Projects
+
+- [Temp-RDP](https://github.com/Deepankar-Siddharth/Temp-RDP) - Main RDP provisioning repository
+- [netslutter-RDP](https://github.com/Deepankar-Siddharth/netslutter-RDP) - Alternative RDP solution
+
+---
+
+## 📞 Support
+
+For issues, questions, or contributions:
+
+- **GitHub Issues:** Open an issue in this repository
+- **Telegram:** [@darkzino](https://t.me/darkzino)
+- **Email:** Deepankarab12@email.com
+
+---
 
 <div align="center">
 
-<a href="https://t.me/darkzino">
-  <img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram" />
-</a>
-<a href="mailto:Deepankarab12@email.com">
-  <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
-</a>
+**Built with ❤️ for automation enthusiasts**
 
-</div>
-
-<div align="center">
-
-<em>"Precision in the clinic. Automation in the terminal."</em>
-
-</div>
+*"Precision in automation. Reliability in execution."*
 
 ![footer](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=footer)
+
+</div>
