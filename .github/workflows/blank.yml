@@ -16,16 +16,25 @@ jobs:
     - name: Download Ngrok and Configuration Files
       run: |
         Write-Host "[*] Downloading ngrok..."
+        # Verified ngrok download URL (Equinox CDN)
         Invoke-WebRequest -Uri "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -OutFile "ngrok.zip" -ErrorAction Stop
         
         Write-Host "[*] Downloading PowerShell scripts..."
+        # Verified GitHub raw URLs
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Img/main/ps/autorun.ps1" -OutFile "autorun.ps1" -ErrorAction Stop
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Img/main/ps/system23.ps1" -OutFile "system23.ps1" -ErrorAction Stop
         
-        Write-Host "[*] Downloading batch scripts..."
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/start.bat" -OutFile "start.bat" -ErrorAction Stop
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/wallpaper.bat" -OutFile "wallpaper.bat" -ErrorAction Stop
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/loop.bat" -OutFile "loop.bat" -ErrorAction Stop
+        Write-Host "[*] Downloading batch scripts (if not present locally)..."
+        # Use local files if available, otherwise download from repository
+        if (-not (Test-Path "start.bat")) {
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/start.bat" -OutFile "start.bat" -ErrorAction Stop
+        }
+        if (-not (Test-Path "wallpaper.bat")) {
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/wallpaper.bat" -OutFile "wallpaper.bat" -ErrorAction Stop
+        }
+        if (-not (Test-Path "loop.bat")) {
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/loop.bat" -OutFile "loop.bat" -ErrorAction Stop
+        }
         
         Write-Host "[*] Downloading wallpaper..."
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Img/main/wallpaper.bmp" -OutFile "wallpaper.bmp" -ErrorAction Stop
@@ -50,9 +59,15 @@ jobs:
         if (-not $env:NGROK_AUTH) {
           Write-Host "[!] ERROR: NGROK_AUTH secret is not set"
           Write-Host "[!] Please configure NGROK_AUTH in Settings > Secrets > Repository secret"
+          Write-Host "[!] Get your token from: https://dashboard.ngrok.com/get-started/your-authtoken"
           exit 1
         }
         .\ngrok\ngrok.exe authtoken $env:NGROK_AUTH
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "[!] ERROR: Failed to authenticate ngrok"
+          Write-Host "[!] Please verify your NGROK_AUTH token is correct"
+          exit 1
+        }
         Write-Host "[+] Ngrok authenticated successfully"
       env:
         NGROK_AUTH: ${{ secrets.NGROK_AUTH }}
@@ -102,6 +117,7 @@ jobs:
         Start-Process PowerShell -ArgumentList '-Noexit', '-Command', '.\ngrok\ngrok.exe tcp --region ap 3389'
         Start-Sleep -Seconds 3
         Write-Host "[+] Ngrok tunnel started"
+        Write-Host "[*] Check tunnel status at: https://dashboard.ngrok.com/status/tunnels"
 
     # ============================================
     # Step 7: Initialize RDP Environment
@@ -124,6 +140,9 @@ jobs:
         Write-Host ""
         Write-Host "The RDP instance is now running."
         Write-Host "Check the 'Initialize RDP Environment' step above for connection details."
+        Write-Host ""
+        Write-Host "If connection details are not shown, visit:"
+        Write-Host "https://dashboard.ngrok.com/status/tunnels"
         Write-Host ""
         Write-Host "You can now close this tab - the RDP will remain active."
         Write-Host ""

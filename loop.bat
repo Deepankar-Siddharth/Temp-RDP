@@ -19,7 +19,7 @@ if errorlevel 1 (
     echo [!] ERROR: ngrok.exe process not found
     echo.
     echo Possible issues:
-    echo   1. NGROK_AUTH_TOKEN may be incorrect
+    echo   1. NGROK_AUTH may be incorrect
     echo   2. Check Settings ^> Secrets ^> Repository secret
     echo   3. Previous VM instance may still be running
     echo   4. Check ngrok status: https://dashboard.ngrok.com/status/tunnels

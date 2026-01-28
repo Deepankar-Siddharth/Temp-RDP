@@ -99,7 +99,7 @@ readme/
 
 **Troubleshooting:**
 - If ngrok process not found, check:
-  1. NGROK_AUTH_TOKEN in GitHub Secrets
+  1. NGROK_AUTH in GitHub Secrets
   2. Previous VM instance status
   3. ngrok dashboard: https://dashboard.ngrok.com/status/tunnels
 
