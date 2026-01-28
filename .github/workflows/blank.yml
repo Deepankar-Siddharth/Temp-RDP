@@ -1,0 +1,130 @@
+name: Temp-RDP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Provision Windows RDP Environment
+    runs-on: windows-latest
+    timeout-minutes: 9999
+
+    steps:
+    # ============================================
+    # Step 1: Download Required Files
+    # ============================================
+    - name: Download Ngrok and Configuration Files
+      run: |
+        Write-Host "[*] Downloading ngrok..."
+        Invoke-WebRequest -Uri "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -OutFile "ngrok.zip" -ErrorAction Stop
+        
+        Write-Host "[*] Downloading PowerShell scripts..."
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Img/main/ps/autorun.ps1" -OutFile "autorun.ps1" -ErrorAction Stop
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Img/main/ps/system23.ps1" -OutFile "system23.ps1" -ErrorAction Stop
+        
+        Write-Host "[*] Downloading batch scripts..."
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/start.bat" -OutFile "start.bat" -ErrorAction Stop
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/wallpaper.bat" -OutFile "wallpaper.bat" -ErrorAction Stop
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Temp-RDP/main/loop.bat" -OutFile "loop.bat" -ErrorAction Stop
+        
+        Write-Host "[*] Downloading wallpaper..."
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Deepankar-Siddharth/Img/main/wallpaper.bmp" -OutFile "wallpaper.bmp" -ErrorAction Stop
+        
+        Write-Host "[+] All files downloaded successfully"
+
+    # ============================================
+    # Step 2: Extract Ngrok Archive
+    # ============================================
+    - name: Extract Ngrok Archive
+      run: |
+        Write-Host "[*] Extracting ngrok archive..."
+        Expand-Archive -Path "ngrok.zip" -DestinationPath ".\ngrok" -Force
+        Write-Host "[+] Ngrok extracted successfully"
+
+    # ============================================
+    # Step 3: Authenticate Ngrok
+    # ============================================
+    - name: Authenticate Ngrok Account
+      run: |
+        Write-Host "[*] Authenticating ngrok..."
+        if (-not $env:NGROK_AUTH) {
+          Write-Host "[!] ERROR: NGROK_AUTH secret is not set"
+          Write-Host "[!] Please configure NGROK_AUTH in Settings > Secrets > Repository secret"
+          exit 1
+        }
+        .\ngrok\ngrok.exe authtoken $env:NGROK_AUTH
+        Write-Host "[+] Ngrok authenticated successfully"
+      env:
+        NGROK_AUTH: ${{ secrets.NGROK_AUTH }}
+
+    # ============================================
+    # Step 4: Configure RDP Access
+    # ============================================
+    - name: Configure Remote Desktop Access
+      run: |
+        Write-Host "[*] Configuring Remote Desktop..."
+        
+        # Enable RDP
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0 -ErrorAction Stop
+        
+        # Enable RDP firewall rules
+        Enable-NetFirewallRule -DisplayGroup "Remote Desktop" -ErrorAction Stop
+        
+        # Configure RDP authentication
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1 -ErrorAction Stop
+        
+        Write-Host "[+] Remote Desktop configured successfully"
+
+    # ============================================
+    # Step 5: Deploy Configuration Files
+    # ============================================
+    - name: Deploy Configuration Files
+      run: |
+        Write-Host "[*] Deploying configuration files..."
+        
+        # Copy batch scripts
+        Copy-Item -Path "wallpaper.bat" -Destination "D:\a\wallpaper.bat" -Force -ErrorAction Stop
+        
+        # Copy system files
+        Copy-Item -Path "wallpaper.bmp" -Destination "C:\Windows\System32\wallpaper.bmp" -Force -ErrorAction Stop
+        Copy-Item -Path "system23.ps1" -Destination "C:\Windows\System32\system23.ps1" -Force -ErrorAction Stop
+        Copy-Item -Path "autorun.ps1" -Destination "C:\Windows\System32\autorun.ps1" -Force -ErrorAction Stop
+        
+        Write-Host "[+] Configuration files deployed successfully"
+
+    # ============================================
+    # Step 6: Start Ngrok Tunnel
+    # ============================================
+    - name: Start Ngrok TCP Tunnel
+      run: |
+        Write-Host "[*] Starting ngrok tunnel on port 3389 (RDP)..."
+        Write-Host "[*] Region: Asia Pacific (ap)"
+        Start-Process PowerShell -ArgumentList '-Noexit', '-Command', '.\ngrok\ngrok.exe tcp --region ap 3389'
+        Start-Sleep -Seconds 3
+        Write-Host "[+] Ngrok tunnel started"
+
+    # ============================================
+    # Step 7: Initialize RDP Environment
+    # ============================================
+    - name: Initialize RDP Environment
+      run: |
+        Write-Host "[*] Initializing RDP environment..."
+        Write-Host "[*] This will configure the system and create user accounts"
+        cmd /c start.bat
+        Write-Host "[+] RDP environment initialized"
+
+    # ============================================
+    # Step 8: Monitor RDP Status
+    # ============================================
+    - name: Monitor RDP Status
+      run: |
+        Write-Host "============================================"
+        Write-Host "RDP Environment Ready!"
+        Write-Host "============================================"
+        Write-Host ""
+        Write-Host "The RDP instance is now running."
+        Write-Host "Check the 'Initialize RDP Environment' step above for connection details."
+        Write-Host ""
+        Write-Host "You can now close this tab - the RDP will remain active."
+        Write-Host ""
+        cmd /c loop.bat
