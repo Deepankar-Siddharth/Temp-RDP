@@ -51,7 +51,7 @@ readme/
 
 1. **Clone**
    ```bash
-   git clone https://github.com/Deepankar-Siddharth/readme.git
+   git clone https://github.com/Deepankar-Siddharth/Temp-RDP.git
    ```
 
 2. **ngrok token** – Get from [ngrok Dashboard](https://dashboard.ngrok.com/get-started/your-authtoken).
